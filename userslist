@@ -1,4 +1,8 @@
 #!/bin/bash
+# Name: Userlist
+# Autor: Marcos Ferreira da Rocha
+# Email: marcos.fr.rocha@gmail.com
+
 
 RETVAL=0
 
