@@ -4,6 +4,10 @@
 # Email: marcos.fr.rocha@gmail.com
 
 
+# Sobre: O userlist é um utilitário para listar de forma simples usuários e grupos presentes no sistema.
+# Ele confere se estão no diretório /home e no arquivo /etc/password
+
+
 RETVAL=0
 
 case "$1" in
