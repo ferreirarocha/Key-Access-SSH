@@ -1,51 +1,46 @@
 #!/bin/bash
-# Name: Userlist
+# Name: acesso.ssh
 # Author: Marcos Ferreira da Rocha
 # E-Mail: marcos.fr.rocha@gmail.com
 
-# Sobre: O userlist é um utilitário para listar de forma simples usuários e grupos presentes no sistema.
+# Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
+# Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
+# Uso 
+# acesso vyos vyos@192.168.1.1
+
 
 RETVAL=0
 ## get mini UID limit ##
-_l="/etc/login.defs"
-_p="/etc/passwd" ## get mini UID limit ##
-l=$(grep "^UID_MIN" $_l) ## get max UID limit ##
-l1=$(grep "^UID_MAX" $_l) ## use awk to print if UID >= $MIN and UID <= $MAX and shell is not /sbin/nologin ##
 
 case "$1" in
    "") 
-      	echo -e " Uso 
- list [-u| users]  -- Exibe os usuários normais (que não sejam do sistema)   \n
- [-U| users-systems]   -- Exibe todos os usuarios do sistema \n
- [groups|-g ]      -- Exibe grupos criados via addgroup \n
- [all-groups|-G]"  -- Exibe todos os grupos do sistema 
 
+# Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
+# Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
+# Uso 
 
+# acesso vyos vyos@192.168.1.1
+echo -e "\nPor favor registre o novo host seguindo o padrão abaixo \n"
 
-      RETVAL=1
+echo -e "acesso -a namehost user@192.168.0.1\n"
+
+	RETVAL=1
+		;;
+	add|-a)
+
+	# Criando o par de chaves
+	ssh-keygen
+
+	# Enviando a chave pública para o servidor
+	ssh-copy-id "$3"
+
+	# Adicionado a função no arquivo .bashrc para facilitar a  autenticaçaõ, o exec $SHELL recarrega a sessaõ para utilizar a nova  função.
+
+	echo "$2() { ssh $3; }" >>  .bashrc ;  exec $SHELL
+
 	;;
 
-	users|-u)
-     	#awk -F: '/\/home/ && ($3 >= 1000) {printf "%s:%s\n",$1,$3}' /etc/passwd
-#	awk -F':' -v "min=${l##UID_MIN}" -v "max=${l1##UID_MAX}" '{ if ( $3 >= min && $3 <= max ) print $0}' /etc/passwd
-	echo "----------[ Normal User Accounts ]---------------"
-	awk -F':' -v "min=${l##UID_MIN}" -v "max=${l1##UID_MAX}" '{ if ( $3 >= min && $3 <= max && $7 != "/sbin/nologin" ) print $0 }' "$_p" | cut -f1 -d:
 
-	;;
-	users-systems|-U)
-	echo "----------[ System User Accounts ]---------------"
-	awk -F':' -v "min=${l##UID_MIN}" -v "max=${l1##UID_MAX}" '{ if ( !($3 >= min && $3 <= max && $7 != "/sbin/nologin")) print $0 }' "$_p" | cut -f1 -d:
-
-
-	;;
-
-	groups|-g)
-     	awk -F: '/\/etc/group && ($3 >= 1000)  && ( $3 < 65534) {printf "%s:%s\n",$1,$3}' /etc/group
-	;;
-
-	all-groups|-G)
-	awk -F:    '{printf "%s:%s\n",$1,$3}' /etc/group
-	;;
-esac
+	esac
 
 exit $RETVAL
