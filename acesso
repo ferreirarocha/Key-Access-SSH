@@ -8,26 +8,17 @@
 # Uso 
 # acesso vyos vyos@192.168.1.1
 
-
 RETVAL=0
 ## get mini UID limit ##
-
 case "$1" in
    "") 
-
-# Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
-# Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
-# Uso 
-
 # acesso vyos vyos@192.168.1.1
 echo -e "\nPor favor registre o novo host seguindo o padrão abaixo \n"
-
 echo -e "acesso -a namehost user@192.168.0.1\n"
 
 	RETVAL=1
 		;;
 	add|-a)
-
 	# Criando o par de chaves
 	ssh-keygen
 
@@ -35,12 +26,7 @@ echo -e "acesso -a namehost user@192.168.0.1\n"
 	ssh-copy-id "$3"
 
 	# Adicionado a função no arquivo .bashrc para facilitar a  autenticaçaõ, o exec $SHELL recarrega a sessaõ para utilizar a nova  função.
-
 	echo "$2() { ssh $3; }" >>  .bashrc ;  exec $SHELL
-
 	;;
-
-
 	esac
-
 exit $RETVAL
