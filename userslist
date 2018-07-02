@@ -1,7 +1,7 @@
 #!/bin/bash
 # Name: Userlist
-# Autor: Marcos Ferreira da Rocha
-# Email: marcos.fr.rocha@gmail.com
+# Author: Marcos Ferreira da Rocha
+# E-Mail: marcos.fr.rocha@gmail.com
 
 
 # Sobre: O userlist é um utilitário para listar de forma simples usuários e grupos presentes no sistema.
