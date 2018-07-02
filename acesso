@@ -1,6 +1,16 @@
+#!/bin/bash
+# Name: Userlist
+# Author: Marcos Ferreira da Rocha
+# E-Mail: marcos.fr.rocha@gmail.com
 
+# Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
+
+# Criando o par de chaves
 ssh-keygen
 
+# Enviando a chave pública para o servidor
 ssh-copy-id "$2"
+
+# Adicionado a função no arquivo .bashrc para facilitar a  autenticaçaõ, o exec $SHELL recarrega a sessaõ para utilizar a nova  função.
 
 echo "$1() { ssh $2; }" >>  .bashrc ;  exec $SHELL
