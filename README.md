@@ -1,6 +1,13 @@
-# utilitarios
+# UsersList
+O userlist é um utilitário para lista de forma simples usuários e grupos presentes no sistema, ele confere se estão no  diretório /home e no arquivo /etc/password
 
-sudo cp  userslist  /usr/bin/
+# Instalando
+
+`wget https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/userslist`
+
+Enviando o arquivo pra o diretório /usr/bin 
+
+`sudo cp  userslist  /usr/bin/`
 
 
 ## Uso 
