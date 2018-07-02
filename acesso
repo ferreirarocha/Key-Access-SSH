@@ -1,0 +1,6 @@
+
+ssh-keygen
+
+ssh-copy-id "$2"
+
+echo "$1() { ssh $2; }" >>  .bashrc ;  exec $SHELL
