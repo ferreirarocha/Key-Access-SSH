@@ -1,5 +1,5 @@
 # UsersList
-O userlist é um utilitário para listar de forma simples usuários e grupos presentes no sistema, ele confere se estão no  diretório /home e no arquivo /etc/password
+O userlist é um utilitário para listar de forma simples usuários e grupos presentes no sistema.
 
 # Instalando
 
