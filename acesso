@@ -17,7 +17,7 @@ echo -e "\nPor favor registre o novo host seguindo o padrão abaixo \n"
 echo -e "acesso -a namehost user@192.168.0.1\n"
 
 	RETVAL=1
-		;;
+	;;
 	add|-a)
 	# Criando o par de chaves
 	ssh-keygen
