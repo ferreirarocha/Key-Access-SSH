@@ -32,21 +32,34 @@
           else
                   echo "sem shell"
           fi
+ ajuda(){
+  	cat <<EOF
+	Para adicionar um host siga o modelo abaixo
+	acesso -a apelido usuario@192.168.1.1
+	
+	Opções;
+
+	-l --list		Lista as conexões registradas
+	-a --add 		Adiciona um nova conexão
+	-n --new-key	Cria um novo par de chaves
+	-e --edit		edita o arquivo de  conexões
+	-h --help		Exibe o menu de ajuda
+EOF
+}
 
 RETVAL=0
 
 	case "$1" in
    	"")
-		echo -e "\nPor favor registre o novo host seguindo o padrão abaixo \n"
-		echo -e "acesso -a namehost user@192.168.0.1\n"
+		ajuda
 
 	RETVAL=1
 		;;
-	new-key|n|-n)
+	--new-key|n|-n)
 
 		ssh-keygen
 	;;
-	add|-a|a)
+	--add|-a|a)
 	if [[ ! -z "$2"  &&  ! -z "$3" ]]; then 
 
 	# Criando o par de chaves
@@ -75,6 +88,9 @@ RETVAL=0
 	;;
 	--edit|-e)
 		nano ~/.functions
+
+	--help|-h)
+		ajuda	
 	esac
 
 exit $RETVAL
