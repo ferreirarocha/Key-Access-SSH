@@ -10,28 +10,35 @@
 
 
 # Criando arquivos de funcao
-	FILE=~/.functions
+	
+	DIR=~/.local/share/acesso/
+	if [ ! -f $DIR ]; then
+           mkdir -p ~/.local/share/acesso
+	fi
+	
+	FILE=~/.local/share/acesso/access_functions
 	if [ ! -f $FILE ]; then
-           touch ~/.functions
+           touch ~/.local/share/acesso/access_functions
 	fi
 
 # Funcao
 
-	shell=$(echo $SHELL)
-
-          if [[ "$shell" == *"bash"* ]] ;then
-			funcao=$(grep -q 'source ~/.functions' ~/.bashrc && echo $?)
+	if [[ "$SHELL" == *"bash"* ]] ;then
+		funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.bashrc && echo $?)
 				if [ "$funcao" != "0" ]; then
-					echo "source ~/.functions" >> ~/.bashrc
+					echo "source ~/.local/share/acesso/access_functions" >> ~/.bashrc
 				fi
-          elif [[ "$shell" == *"zsh"* ]] ;then
-                      funcao=$(grep -q 'source ~/.functions' ~/.zshrc && echo $?)
-	                        if [ "$funcao" != "0" ]; then
-        		         	echo "source ~/.functions" >> ~/.zshrc
+
+	elif [[ "$SHELL" == *"zsh"* ]] ;then
+		funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.zshrc && echo $?)
+	            if [ "$funcao" != "0" ]; then
+	            	echo "source ~/.local/share/acesso/access_functions" >> ~/.zshrc
 				fi
-          else
-                  echo "sem shell"
-          fi
+    
+    else
+    	echo "sem shell"
+    fi
+ 
  ajuda(){
   	cat <<EOF
 	Para adicionar um host siga o modelo abaixo
@@ -41,9 +48,24 @@
 
 	-l --list		Lista as conexões registradas
 	-a --add 		Adiciona um nova conexão
-	-n --new-key	Cria um novo par de chaves
+	-n --new-key		Cria um novo par de chaves
 	-e --edit		edita o arquivo de  conexões
 	-h --help		Exibe o menu de ajuda
+EOF
+}
+
+config(){
+	cat <<EOF
+
+	Abaixo é apresentado o conjuto de  diretórios e arquivos que compõem a aplicação
+
+	access_functions	Armazena as conexões registradas
+	~/.local/share/acesso/	Armazena os arquivos de configuração da aplicação
+	~/.bashrc		Exportar o arquivo access_functions para o shell corrent
+	~/.zshrc		Exportar o arquivo access_functions para o shell corrente
+	~/.ssh/			Diretório utilizado para  acessar o par de chaves
+	/usr/bin/		Diretório com  script executável
+
 EOF
 }
 
@@ -74,20 +96,22 @@ RETVAL=0
 
 #		Adicionado a função no arquivo .bashrc para facilitar a  autenticaçaõ, o exec $SHELL recarrega a sessaõ para utilizar a nova  função.
 
-		echo "$2() { ssh -i "$chave" "$3"; }" >>  ~/.functions ; exec $SHELL
+		echo "$2() { ssh -i "$chave" "$3"; }" >>  ~/.local/share/acesso/access_functions ; exec $SHELL
 	else
-		echo -e "Formato incorreto\n"
-		echo -e "Use o padrao"
-		echo -e	"acesso vyos vyos@192.168.1."
+		ajuda
 	fi
 	;;
 	--list|-l)
 		echo ""
-		cat ~/.functions | sed -e 's/()/  |  /'| sed -e 's/{//' | sed -e 's/}//' | sed -e 's/;/ /'  | sed -e 's/   //'
+		cat ~/.local/share/acesso/access_functions | sed -e 's/()/  |  /'| sed -e 's/{//' | sed -e 's/}//' | sed -e 's/;/ /'  | sed -e 's/   //'
 		echo "" 
 	;;
 	--edit|-e)
-		nano ~/.functions
+		nano ~/.local/share/acesso/access_functions
+
+	;;
+	--conf|-c)
+		config
 	;;
 	--help|-h)
 		ajuda	
