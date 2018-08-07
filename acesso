@@ -6,7 +6,7 @@
 # Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
 # Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
 # Uso 
-# acesso vyos vyos@192.168.1.1
+# acesso --option  vyos vyos@192.168.1.1
 
 
 # Criando arquivos de funcao
@@ -51,6 +51,27 @@
 	-n --new-key		Cria um novo par de chaves
 	-e --edit		edita o arquivo de  conexões
 	-h --help		Exibe o menu de ajuda
+	-x --export		Exportar registro de conexões
+	-i --import		importar registro de conexões
+	   --clear		Limpar   registro de conexões
+EOF
+}
+ajuda-export(){
+	cat <<EOF
+
+	Uso:
+	acesso -e nome-do-arquivo
+        acesso --export nome-do-arquivo
+
+EOF
+}
+ajuda-import(){
+        cat <<EOF
+
+	Uso:
+        acesso -i nome-do-arquivo
+        acesso --import nome-do-arquivo
+
 EOF
 }
 
@@ -109,6 +130,31 @@ RETVAL=0
 	--edit|-e)
 		nano ~/.local/share/acesso/access_functions
 
+	;;
+        --export|-x|x)
+	if [[ ! -z "$2"  ]]; then
+		cp  -Rv ~/.local/share/acesso/access_functions  ~/"$2".bkp
+	else
+		ajuda-export
+		ajuda
+	fi
+	;;
+	--import|-i|i)
+	if [[ ! -z "$2" ]]; then
+		cp  -Rv "$2"  -Rv ~/.local/share/acesso/access_functions 
+		exec $SHELL
+	else
+		ajuda-import
+		ajuda
+	fi
+	;;
+	--save|-s)
+	cp  ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
+	cp  ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
+	;;
+	--clear)
+	echo > ~/.local/share/acesso/access_functions
+	exec $SHELL
 	;;
 	--conf|-c)
 		config
