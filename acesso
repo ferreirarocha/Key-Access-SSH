@@ -41,36 +41,47 @@
  
  ajuda(){
   	cat <<EOF
-	Para adicionar um host siga o modelo abaixo
-	acesso -a apelido usuario@192.168.1.1
 	
-	Opções;
-
-	-l --list		Lista as conexões registradas
+	Todas as opções;
+	
 	-a --add 		Adiciona um nova conexão
-	-n --new-key		Cria um novo par de chaves
+	-c --config		Lista os arquivos de configuração e diretórios do script
+	   --clear		Limpar   registro de conexões
 	-e --edit		edita o arquivo de  conexões
 	-h --help		Exibe o menu de ajuda
-	-x --export		Exportar registro de conexões
 	-i --import		importar registro de conexões
-	   --clear		Limpar   registro de conexões
+	-l --list		Lista as conexões registradas
+	-n --new-key		Cria um novo par de chaves
+	-s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
+	-x --export		Exportar registro de conexões
+	
+
+EOF
+}
+ajuda-registro(){
+	cat <<EOF
+	
+	Para registrar uma nova  conexão siga o exemplo;
+
+	acesso -a servidor user@192.168.1.1
 EOF
 }
 ajuda-export(){
 	cat <<EOF
-
-	Uso:
+	Para exportar todos os registros de conexões siga o exemplo;
+	
 	acesso -e nome-do-arquivo
-        acesso --export nome-do-arquivo
+	acesso --export nome-do-arquivo
 
 EOF
 }
 ajuda-import(){
         cat <<EOF
 
-	Uso:
-        acesso -i nome-do-arquivo
-        acesso --import nome-do-arquivo
+	Para importar todos os registros de conexões siga o exemplo;
+
+	acesso -i nome-do-arquivo
+	acesso --import nome-do-arquivo
 
 EOF
 }
@@ -119,6 +130,7 @@ RETVAL=0
 
 		echo "$2() { ssh -i "$chave" "$3"; }" >>  ~/.local/share/acesso/access_functions ; exec $SHELL
 	else
+		ajuda-registro
 		ajuda
 	fi
 	;;
@@ -133,7 +145,7 @@ RETVAL=0
 	;;
         --export|-x|x)
 	if [[ ! -z "$2"  ]]; then
-		cp  -Rv ~/.local/share/acesso/access_functions  ~/"$2".bkp
+		cp  -v ~/.local/share/acesso/access_functions  ~/"$2".bkp
 	else
 		ajuda-export
 		ajuda
@@ -141,16 +153,16 @@ RETVAL=0
 	;;
 	--import|-i|i)
 	if [[ ! -z "$2" ]]; then
-		cp  -Rv "$2"  -Rv ~/.local/share/acesso/access_functions 
+		cp  -v "$2"  -Rv ~/.local/share/acesso/access_functions 
 		exec $SHELL
 	else
 		ajuda-import
 		ajuda
 	fi
 	;;
-	--save|-s)
-	cp  ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
-	cp  ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
+	--save-key|-s)
+	cp -v ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
+	cp -v ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
 	;;
 	--clear)
 	echo > ~/.local/share/acesso/access_functions
