@@ -1,0 +1,1 @@
+alias permissao='stat  -c "%a %U %n "'
