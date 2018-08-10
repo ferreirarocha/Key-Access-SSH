@@ -112,7 +112,7 @@ EOF
 }
 install(){
 echo "Instalando o script KAS Key Acess SSH"
-sudo wget -O /usr/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
+wget -O /usr/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
 chmod +x /usr/bin/kas
 echo "Script instalado"
 echo "Veja a lista de opçoes"
