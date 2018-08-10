@@ -5,7 +5,8 @@
 
 # Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
 # Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
-editor=subl3
+#editor=nano
+source ~/.local/share/acesso/variables
 name=kas
 data=$(date +%d-%m-%Y-%H-%M-%S)
 
@@ -19,6 +20,11 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 	FILE=~/.local/share/acesso/access_functions
 	if [ ! -f $FILE ]; then
            touch ~/.local/share/acesso/access_functions
+	fi
+	variables=~/.local/share/acesso/variables
+	if [ ! -f $variables ]; then
+           echo 'editor=nano' > ~/.local/share/acesso/variables
+
 	fi
 
 # Funcao
@@ -143,7 +149,7 @@ ajuda-edit(){
 
 	$name -e nano
 	
-	O padrão do scrit é o editor $set-editor
+	O padrão do scrit é o editor nano
 EOF
 }
 RETVAL=0
@@ -297,8 +303,20 @@ RETVAL=0
 		install
 	;;
 	--set-editor)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-edit
+				exit 0	
+	fi
+
+	if [[ ! -z "$2" ]]; then
+
+	sed -i s/editor=.*/editor="$2"/ ~/.local/share/acesso/variables
 	
-	sed -i 8s/editor=.*/editor="$2"/ /usr/bin/kas
+	else
+		ajuda-edit
+		ajuda
+
+	fi
 	esac
 
 
