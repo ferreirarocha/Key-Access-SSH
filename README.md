@@ -5,24 +5,20 @@ Gerencia os registros de conexão ssh
 ![kas-ssh-access-Keys](https://2.bp.blogspot.com/-zJlbnWEMy2o/W21ws6IxsxI/AAAAAAABIfY/MDhjmI3jfccrxAAOJQhgKxw4frCgAXxdQCLcBGAs/s320/kas-ssh-access-Keys.png)
 
 
+## Instalação automática
+```
+curl -s https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas | bash -s -- --install
+```
 
-# UsersList
-O userlist é um utilitário para listar de forma simples usuários e grupos presentes no sistema.
+## Instalação manual
+```
+wget https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
+```
 
-# Instalando
+```
+chmod +x kas
+```
 
-`wget https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/userslist`
-
-Enviando o arquivo pra o diretório /usr/bin 
-
-`sudo cp  userslist  /usr/bin/`
-
-
-## Uso 
- list [-u| users]  -- Exibe os usuarios criados criados com ferramentas administrativas normalmente  possuiem ID acima de 1000 e que possuam diretório home , exceto o  user nobody  
-
- [-U| all-users]   -- Exibe todos os usuarios do sistema 
-
- [groups|-g ]      -- Exibe grupos criados via addgroup 
-
- [all-groups|-G] -- Exibe todos os grupos do sistema
+```
+cp /usr/bin/
+```
