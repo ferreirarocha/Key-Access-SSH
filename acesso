@@ -8,7 +8,7 @@
 # Uso 
 # acesso --option  vyos vyos@192.168.1.1
 
-
+	data=$(date +%d-%m-%Y-%H-%M-%S)
 # Criando arquivos de funcao
 	
 	DIR=~/.local/share/acesso/
@@ -46,14 +46,17 @@
 	
 	-a --add 		Adiciona um nova conexão
 	-c --config		Lista os arquivos de configuração e diretórios do script
-	   --clear		Limpar   registro de conexões
 	-e --edit		edita o arquivo de  conexões
 	-h --help		Exibe o menu de ajuda
 	-i --import		importar registro de conexões
+	-I --import-all		Importa  as chaves e as  conexões registradas
 	-l --list		Lista as conexões registradas
 	-n --new-key		Cria um novo par de chaves
+	-r --reset		Limpar   registro de conexões
 	-s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
 	-x --export		Exportar registro de conexões
+	-X --export-all		Salva as chaves e as  conexões registradas
+
 	
 
 EOF
@@ -86,6 +89,27 @@ ajuda-import(){
 EOF
 }
 
+ajuda-import-all(){
+        cat <<EOF
+
+	Para importar todos os registros de conexões e chave ssh siga o exemplo;
+	
+	acesso -I nome-do-arquivo
+	acesso --import-all nome-do-arquivo
+EOF
+
+}
+ajuda-export-all(){
+        cat <<EOF
+
+	Para exportar todos os registros de conexões e chave ssh siga o exemplo;
+
+	acesso -X nome-do-arquivo
+	acesso --export-all nome-do-arquivo
+EOF
+
+}
+
 config(){
 	cat <<EOF
 
@@ -109,16 +133,23 @@ RETVAL=0
 
 	RETVAL=1
 		;;
+
 	--new-key|n|-n)
 
 		ssh-keygen
 	;;
 	--add|-a|a)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-registro
+				exit 0	
+	fi
+
 	if [[ ! -z "$2"  &&  ! -z "$3" ]]; then 
 
 	# Criando o par de chaves
 #		SSH
 		chave=~/.ssh/key-acesso.rsa
+
 		if [ ! -f $chave ]; then
 			ssh-keygen -t rsa -N '' -f "$chave"
 		fi
@@ -133,17 +164,25 @@ RETVAL=0
 		ajuda-registro
 		ajuda
 	fi
+	
 	;;
 	--list|-l)
+
 		echo ""
 		cat ~/.local/share/acesso/access_functions | sed -e 's/()/  |  /'| sed -e 's/{//' | sed -e 's/}//' | sed -e 's/;/ /'  | sed -e 's/   //'
 		echo "" 
 	;;
 	--edit|-e)
+
 		nano ~/.local/share/acesso/access_functions
 
 	;;
-        --export|-x|x)
+    --export|-x|x)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-export
+				exit 0	
+	fi
+
 	if [[ ! -z "$2"  ]]; then
 		cp  -v ~/.local/share/acesso/access_functions  ~/"$2".bkp
 	else
@@ -152,6 +191,11 @@ RETVAL=0
 	fi
 	;;
 	--import|-i|i)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-import
+				exit 0	
+	fi
+
 	if [[ ! -z "$2" ]]; then
 		cp  -v "$2"  -Rv ~/.local/share/acesso/access_functions 
 		exec $SHELL
@@ -160,19 +204,66 @@ RETVAL=0
 		ajuda
 	fi
 	;;
+	
 	--save-key|-s)
-	cp -v ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
-	cp -v ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
+
+		cp -v ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
+		cp -v ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
 	;;
-	--clear)
-	echo > ~/.local/share/acesso/access_functions
-	exec $SHELL
+	
+	--reset|-r)
+
+		echo > ~/.local/share/acesso/access_functions
+		exec $SHELL
 	;;
+	
+	--export-all|-X)
+
+	if [[ "$2" = "--help" ]]; then
+				ajuda-export-all
+				exit 0	
+	fi
+	if [[ ! -z "$2" ]]; then
+			tar -czf -  ~/.ssh/key-acesso.rsa*  \
+			~/.local/share/acesso/access_functions | openssl enc -e -aes256 -out "$2".tar.gz
+				
+			echo "Sua configuração foi salva como "$2".tar.gz"
+	else
+		ajuda-export-all
+		ajuda
+	fi 
+	
+
+	
+	;;
+
+	--import-all|-I)
+
+	if [[ "$2" = "--help" ]]; then
+				ajuda-import-all
+				exit 0	
+	fi
+
+	if [[ ! -z "$2" ]]; then
+		openssl enc -d -aes256 -in  "$2" | tar xz -C /
+
+	else
+		ajuda-import-all
+		ajuda
+	fi 
+
+
+	
+	;;
+
 	--conf|-c)
 		config
+	
 	;;
+
 	--help|-h)
 		ajuda	
+	
 	esac
 
 exit $RETVAL
