@@ -12,7 +12,7 @@ curl -s https://raw.githubusercontent.com/ferreirarocha/Key-Access-SSH/master/ka
 
 ## Instalação manual
 ```
-wget https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
+wget https://raw.githubusercontent.com/ferreirarocha/Key-Access-SSH/master/kas
 ```
 
 ```
