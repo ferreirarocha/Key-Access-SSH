@@ -7,6 +7,7 @@
 # Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
 # Uso 
 # acesso --option  vyos vyos@192.168.1.1
+# Instalando via script
 
 	data=$(date +%d-%m-%Y-%H-%M-%S)
 # Criando arquivos de funcao
@@ -56,6 +57,7 @@
 	-s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
 	-x --export		Exportar registro de conexões
 	-X --export-all		Salva as chaves e as  conexões registradas
+	   --install		instala ou atualiza o script
 
 	
 
@@ -108,6 +110,14 @@ ajuda-export-all(){
 	acesso --export-all nome-do-arquivo
 EOF
 
+}
+install(){
+"Instalando o script KAS Key Acess SSH"
+sudo wget -O /us/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
+chmod +x /us/bin/kas
+echo "Script instalado"
+echo "Veja a lista de opçoes"
+kas --help
 }
 
 config(){
@@ -263,7 +273,9 @@ RETVAL=0
 
 	--help|-h)
 		ajuda	
-	
+	;;
+	--install)
+		install
 	esac
 
 exit $RETVAL
