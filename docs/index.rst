@@ -9,7 +9,7 @@
 
 .. _header-n18:
 
-Ajuda
+Menu de ajuda
 =====
 
 .. code:: 
@@ -20,21 +20,21 @@ Ajuda
    -c --conf		Lista os arquivos de configuração e diretórios do script
    -e --edit		edita o arquivo de  conexões
    -h --help		Exibe o menu de ajuda
-   -i --import		importar registro de conexões
+   -i --import		importa registro de conexões
    -I --import-all	Importa  as chaves e as  conexões registradas
    -l --list		Lista as conexões registradas
    -n --new-key         Cria um novo par de chaves
-   -r --reset		Limpar   registro de conexões
+   -r --reset		Limpa registro de conexões
    -s --save-key	Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
-      --set-editor	Configure o editor padrão
-      --uninstall Remover o script	   
-   -x --export		Exportar registro de conexões
+      --set-editor	Configura o editor padrão
+      --uninstall    Remove o script	   
+   -x --export		Exporta o registro de conexões
    -X --export-all	Salva as chaves e as  conexões registradas
       --install		Instala ou atualiza o Key Access ssh (kas)
 
 .. _header-n23:
 
-Ajuda-registro
+Adicionando registro de conexão
 ==============
 
 .. code:: 
@@ -45,7 +45,7 @@ Ajuda-registro
 
 .. _header-n25:
 
-Ajuda-export
+Exportando registros de conexão
 ============
 
 .. code:: 
@@ -57,7 +57,7 @@ Ajuda-export
 
 .. _header-n28:
 
-Ajuda-import
+Importando registro de conexão
 ============
 
 .. code:: 
@@ -69,7 +69,7 @@ Ajuda-import
 
 .. _header-n32:
 
-Ajuda-import-all
+Importando todos os registros e chaves de conexão
 ================
 
 .. code:: 
@@ -81,7 +81,7 @@ Ajuda-import-all
 
 .. _header-n35:
 
-Ajuda-export-all
+Exportando todos os registros e chaves de conexão
 ================
 
 .. code:: 
@@ -93,7 +93,7 @@ Ajuda-export-all
 
 .. _header-n39:
 
-Config
+Exibir diretório e arquivos de Configuração
 ======
 
 .. code:: 
