@@ -21,15 +21,15 @@ Ajuda
    -e --edit		edita o arquivo de  conexões
    -h --help		Exibe o menu de ajuda
    -i --import		importar registro de conexões
-   -I --import-all		Importa  as chaves e as  conexões registradas
+   -I --import-all	Importa  as chaves e as  conexões registradas
    -l --list		Lista as conexões registradas
-   -n --new-key		Cria um novo par de chaves
+   -n --new-key	Cria um novo par de chaves
    -r --reset		Limpar   registro de conexões
-   -s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
-      --set-editor		Configure o editor padrão
+   -s --save-key	Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
+      --set-editor	Configure o editor padrão
       --uninstall		Remover o script	   
    -x --export		Exportar registro de conexões
-   -X --export-all		Salva as chaves e as  conexões registradas
+   -X --export-all	Salva as chaves e as  conexões registradas
       --install		Instala ou atualiza o Key Access ssh (kas)
 
 .. _header-n23:
