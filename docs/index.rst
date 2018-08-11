@@ -23,7 +23,7 @@ Ajuda
    -i --import		importar registro de conexões
    -I --import-all	Importa  as chaves e as  conexões registradas
    -l --list		Lista as conexões registradas
-   -n --new-key	Cria um novo par de chaves
+   -n --new-key      Cria um novo par de chaves
    -r --reset		Limpar   registro de conexões
    -s --save-key	Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
       --set-editor	Configure o editor padrão
