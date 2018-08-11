@@ -1,52 +1,129 @@
 #!/bin/bash
-# Name: acesso.ssh
-# Author: Marcos Ferreira da Rocha
-# E-Mail: marcos.fr.rocha@gmail.com
+# Name: kas.ssh
+Author="Marcos Ferreira da Rocha"
+EMail="marcos.fr.rocha@gmail.com"
+Descr="Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh."
+version=1.0
 
-# Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
-# Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
-# Uso 
-# acesso vyos vyos@192.168.1.1
-
+source ~/.local/share/acesso/variables
+name=kas
+data=$(date +%d-%m-%Y-%H-%M-%S)
 
 # Criando arquivos de funcao
+	
 	DIR=~/.local/share/acesso/
 	if [ ! -f $DIR ]; then
            mkdir -p ~/.local/share/acesso
 	fi
+	
 	FILE=~/.local/share/acesso/access_functions
 	if [ ! -f $FILE ]; then
            touch ~/.local/share/acesso/access_functions
 	fi
+	variables=~/.local/share/acesso/variables
+	if [ ! -f $variables ]; then
+           echo 'editor=nano' > ~/.local/share/acesso/variables
+
+	fi
 
 # Funcao
-
+ 
 	if [[ "$SHELL" == *"bash"* ]] ;then
-			funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.bashrc && echo $?)
+		funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.bashrc && echo $?)
 				if [ "$funcao" != "0" ]; then
 					echo "source ~/.local/share/acesso/access_functions" >> ~/.bashrc
 				fi
+
 	elif [[ "$SHELL" == *"zsh"* ]] ;then
-            funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.zshrc && echo $?)
+		funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.zshrc && echo $?)
 	            if [ "$funcao" != "0" ]; then
-        	    	echo "source ~/.local/share/acesso/access_functions" >> ~/.zshrc
+	            	echo "source ~/.local/share/acesso/access_functions" >> ~/.zshrc
 				fi
+    
     else
-                  echo "sem shell"
+    	echo "sem shell"
     fi
+ 
  ajuda(){
   	cat <<EOF
-	Para adicionar um host siga o modelo abaixo
-	acesso -a apelido usuario@192.168.1.1
 	
-	Opções;
-
-	-l --list		Lista as conexões registradas
+	Todas as opções;
+	
 	-a --add 		Adiciona um nova conexão
-	-n --new-key		Cria um novo par de chaves
+	-c --conf		Lista os arquivos de configuração e diretórios do script
 	-e --edit		edita o arquivo de  conexões
 	-h --help		Exibe o menu de ajuda
+	-i --import		importar registro de conexões
+	-I --import-all		Importa  as chaves e as  conexões registradas
+	-l --list		Lista as conexões registradas
+	-n --new-key		Cria um novo par de chaves
+	-r --reset		Limpar   registro de conexões
+	-s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
+	   --set-editor		Configure o editor padrão
+	   --uninstall		Remover o script	   
+	-x --export		Exportar registro de conexões
+	-X --export-all		Salva as chaves e as  conexões registradas
+	   --install		Instala ou atualiza o Key Access ssh (kas)
+
+	
+
 EOF
+}
+ajuda-registro(){
+	cat <<EOF
+	
+	Para registrar uma nova  conexão siga o exemplo;
+
+	$name -a servidor user@192.168.1.1
+EOF
+}
+ajuda-export(){
+	cat <<EOF
+	Para exportar todos os registros de conexões siga o exemplo;
+	
+	$name -e nome-do-arquivo
+	$name --export nome-do-arquivo
+
+EOF
+}
+ajuda-import(){
+        cat <<EOF
+
+	Para importar todos os registros de conexões siga o exemplo;
+
+	$name -i nome-do-arquivo
+	$name --import nome-do-arquivo
+
+EOF
+}
+
+ajuda-import-all(){
+        cat <<EOF
+
+	Para importar todos os registros de conexões e chave ssh siga o exemplo;
+	
+	$name -I nome-do-arquivo
+	$name --import-all nome-do-arquivo
+EOF
+
+}
+ajuda-export-all(){
+        cat <<EOF
+
+	Para exportar todos os registros de conexões e chave ssh siga o exemplo;
+
+	$name -X nome-do-arquivo
+	$name --export-all nome-do-arquivo
+EOF
+
+}
+install(){
+echo "Instalando o script KAS Key Acess SSH"
+wget -O /usr/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
+chmod +x /usr/bin/kas
+echo "Script instalado"
+echo "Veja a lista de opçoes"
+kas --help
 }
 
 config(){
@@ -63,7 +140,18 @@ config(){
 
 EOF
 }
+ajuda-edit(){
+        cat <<EOF
 
+	Para editar a lista de registro  através de  outro editor por exemplo nano
+
+	execute o script da seguinte forma
+
+	$name -e nano
+	
+	O padrão do scrit é o editor nano
+EOF
+}
 RETVAL=0
 
 	case "$1" in
@@ -72,16 +160,23 @@ RETVAL=0
 
 	RETVAL=1
 		;;
+
 	--new-key|n|-n)
 
 		ssh-keygen
 	;;
 	--add|-a|a)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-registro
+				exit 0	
+	fi
+
 	if [[ ! -z "$2"  &&  ! -z "$3" ]]; then 
 
 	# Criando o par de chaves
 #		SSH
 		chave=~/.ssh/key-acesso.rsa
+
 		if [ ! -f $chave ]; then
 			ssh-keygen -t rsa -N '' -f "$chave"
 		fi
@@ -93,23 +188,155 @@ RETVAL=0
 
 		echo "$2() { ssh -i "$chave" "$3"; }" >>  ~/.local/share/acesso/access_functions ; exec $SHELL
 	else
+		ajuda-registro
 		ajuda
 	fi
+	
 	;;
 	--list|-l)
+
 		echo ""
 		cat ~/.local/share/acesso/access_functions | sed -e 's/()/  |  /'| sed -e 's/{//' | sed -e 's/}//' | sed -e 's/;/ /'  | sed -e 's/   //'
 		echo "" 
 	;;
 	--edit|-e)
-		nano ~/.local/share/acesso/access_functions
+	if [[ "$2" = "--help" ]]; then
+				ajuda-edit
+				exit 0	
+	fi
+	if [[ ! -z "$2" ]]; then 
 
+
+		$2 ~/.local/share/acesso/access_functions
+	else
+		"$editor" ~/.local/share/acesso/access_functions
+	fi
 	;;
+    --export|-x|x)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-export
+				exit 0	
+	fi
+
+	if [[ ! -z "$2"  ]]; then
+		cp  -v ~/.local/share/acesso/access_functions  ~/"$2".bkp
+	else
+		ajuda-export
+		ajuda
+	fi
+	;;
+	--import|-i|i)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-import
+				exit 0	
+	fi
+
+	if [[ ! -z "$2" ]]; then
+		cp  -v "$2"  -Rv ~/.local/share/acesso/access_functions 
+		exec $SHELL
+	else
+		ajuda-import
+		ajuda
+	fi
+	;;
+	
+	--save-key|-s)
+
+		cp -v ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
+		cp -v ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
+	;;
+	
+	--reset|-r)
+
+		echo > ~/.local/share/acesso/access_functions
+		exec $SHELL
+	;;
+	
+	--export-all|-X)
+
+	if [[ "$2" = "--help" ]]; then
+				ajuda-export-all
+				exit 0	
+	fi
+	if [[ ! -z "$2" ]]; then
+			tar -czf -  ~/.ssh/key-acesso.rsa*  \
+			~/.local/share/acesso/access_functions | openssl enc -e -aes256 -out "$2".tar.gz
+				
+			echo "Sua configuração foi salva como "$2".tar.gz"
+	else
+		ajuda-export-all
+		ajuda
+	fi 
+	
+
+	
+	;;
+
+	--import-all|-I)
+
+	if [[ "$2" = "--help" ]]; then
+				ajuda-import-all
+				exit 0	
+	fi
+
+	if [[ ! -z "$2" ]]; then
+		openssl enc -d -aes256 -in  "$2" | tar xz -C /
+
+	else
+		ajuda-import-all
+		ajuda
+	fi 
+
+
+	
+	;;
+
 	--conf|-c)
 		config
+	
 	;;
+
 	--help|-h)
 		ajuda	
+	;;
+	--install)
+		install
+	;;
+	--set-editor)
+	if [[ "$2" = "--help" ]]; then
+				ajuda-edit
+				exit 0	
+	fi
+
+	if [[ ! -z "$2" ]]; then
+
+	sed -i s/editor=.*/editor="$2"/ ~/.local/share/acesso/variables
+	
+	else
+		ajuda-edit
+		ajuda
+
+	fi
+	;;
+	--uninstall)
+	
+	rm /usr/bin/kas
+	echo "Script remmovido"
+	;;
+	--version|-v)
+		cat <<EOF
+	
+	Versão : $version
+	
+	Autor :  $Author
+	
+	Descrição :  $Descr
+	
+	E-Mail : $EMail
+	
+EOF
+	
 	esac
+
 
 exit $RETVAL
