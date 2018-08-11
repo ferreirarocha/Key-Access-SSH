@@ -7,9 +7,6 @@
   pública em um servidor ssh."
 | version=1.0
 
-| source ~/.local/share/acesso/variables
-| name=kas
-| data=$(date +%d-%m-%Y-%H-%M-%S)
 
 .. _header-n18:
 
@@ -45,7 +42,7 @@ Ajuda-registro
 
    Para registrar uma nova  conexão siga o exemplo;
 
-   $name -a servidor user@192.168.1.1
+   kas -a servidor user@192.168.1.1
 
 .. _header-n25:
 
@@ -56,8 +53,8 @@ Ajuda-export
 
    Para exportar todos os registros de conexões siga o exemplo;
 
-   $name -e nome-do-arquivo
-   $name --export nome-do-arquivo
+   kas -e nome-do-arquivo
+   kas --export nome-do-arquivo
 
 .. _header-n28:
 
@@ -68,8 +65,8 @@ Ajuda-import
 
    Para importar todos os registros de conexões siga o exemplo;
 
-   $name -i nome-do-arquivo
-   $name --import nome-do-arquivo
+   kas -i nome-do-arquivo
+   kas --import nome-do-arquivo
 
 .. _header-n32:
 
@@ -80,8 +77,8 @@ Ajuda-import-all
 
    Para importar todos os registros de conexões e chave ssh siga o exemplo;
 
-   $name -I nome-do-arquivo
-   $name --import-all nome-do-arquivo
+   kas -I nome-do-arquivo
+   kas --import-all nome-do-arquivo
 
 .. _header-n35:
 
@@ -92,8 +89,8 @@ Ajuda-export-all
 
    Para exportar todos os registros de conexões e chave ssh siga o exemplo;
 
-   $name -X nome-do-arquivo
-   $name --export-all nome-do-arquivo
+   kas -X nome-do-arquivo
+   kas --export-all nome-do-arquivo
 
 .. _header-n39:
 
