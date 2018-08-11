@@ -50,7 +50,7 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 	Todas as opções;
 	
 	-a --add 		Adiciona um nova conexão
-	-c --config		Lista os arquivos de configuração e diretórios do script
+	-c --conf		Lista os arquivos de configuração e diretórios do script
 	-e --edit		edita o arquivo de  conexões
 	-h --help		Exibe o menu de ajuda
 	-i --import		importar registro de conexões
