@@ -1,3 +1,5 @@
+![KAS Key Access SSH](netbox_logo.png "NetBox logo")
+
 Author="Marcos Ferreira da Rocha"
 EMail="marcos.fr.rocha@gmail.com"
 Descr="Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh."
@@ -8,7 +10,7 @@ name=kas
 data=$(date +%d-%m-%Y-%H-%M-%S)
 
 
- ajuda()
+ ## Ajuda
 	
 	Todas as opções;
 	
@@ -31,20 +33,20 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 	
 
 
-ajuda-registro
+## Ajuda-registro
 	
 	Para registrar uma nova  conexão siga o exemplo;
 
 	$name -a servidor user@192.168.1.1
 
-ajuda-export
+## Ajuda-export
 	Para exportar todos os registros de conexões siga o exemplo;
 	
 	$name -e nome-do-arquivo
 	$name --export nome-do-arquivo
 
 
-ajuda-import
+## Ajuda-import
 
 
 	Para importar todos os registros de conexões siga o exemplo;
@@ -53,7 +55,7 @@ ajuda-import
 	$name --import nome-do-arquivo
 
 
-ajuda-import-all
+## Ajuda-import-all
 
 
 	Para importar todos os registros de conexões e chave ssh siga o exemplo;
@@ -61,7 +63,7 @@ ajuda-import-all
 	$name -I nome-do-arquivo
 	$name --import-all nome-do-arquivo
 
-ajuda-export-all(){
+## Ajuda-export-all
    
 
 	Para exportar todos os registros de conexões e chave ssh siga o exemplo;
@@ -70,7 +72,7 @@ ajuda-export-all(){
 	$name --export-all nome-do-arquivo
 
 
-config
+## Config
 	Abaixo é apresentado o conjuto de  diretórios e arquivos que compõem a aplicação
 
 	access_functions	Armazena as conexões registradas
@@ -79,8 +81,3 @@ config
 	~/.zshrc		Exportar o arquivo access_functions para o shell corrente
 	~/.ssh/			Diretório utilizado para  acessar o par de chaves
 	/usr/bin/		Diretório com  script executável
-
-
-
-	
-
