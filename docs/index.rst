@@ -5,6 +5,12 @@
 | EMail marcos.fr.rocha@gmail.com
 | Este script envia automatiza a geração e inserção de chave pública em um servidor ssh.
 | version=1.0
+.. _header-n12:
+
+Sobre
+=====
+O KAS Key Access SSH, automatiza a geração e inserção de chave pública em servidores ssh, ele também cria  funções para cada conexão no shell corrente afim de facilitar o acesso futuro.
+Ele também pode exportar, importar, e criar novos pares de chave de conexão, saiba mais na documentação.
 
 
 .. _header-n18:
