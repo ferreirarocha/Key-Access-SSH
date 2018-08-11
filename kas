@@ -1,11 +1,10 @@
 #!/bin/bash
 # Name: kas.ssh
-# Author: Marcos Ferreira da Rocha
-# E-Mail: marcos.fr.rocha@gmail.com
+Author="Marcos Ferreira da Rocha"
+EMail="marcos.fr.rocha@gmail.com"
+Descr="Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh."
+version=1.0
 
-# Este script envia automatiza a geração e inserção de chave  pública em um servidor ssh.
-# Para ficar mais comodo envie esse arquivo para o diretório /usr/bin
-#editor=nano
 source ~/.local/share/acesso/variables
 name=kas
 data=$(date +%d-%m-%Y-%H-%M-%S)
@@ -60,7 +59,8 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 	-n --new-key		Cria um novo par de chaves
 	-r --reset		Limpar   registro de conexões
 	-s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
-	   --set-editor)	Configure o editor padrão
+	   --set-editor		Configure o editor padrão
+	   --uninstall		Remover o script	   
 	-x --export		Exportar registro de conexões
 	-X --export-all		Salva as chaves e as  conexões registradas
 	   --install		Instala ou atualiza o Key Access ssh (kas)
@@ -317,6 +317,25 @@ RETVAL=0
 		ajuda
 
 	fi
+	;;
+	--uninstall)
+	
+	rm /usr/bin/kas
+	echo "Script remmovido"
+	;;
+	--version|-v)
+		cat <<EOF
+	
+	Versão : $version
+	
+	Autor :  $Author
+	
+	Descrição :  $Descr
+	
+	E-Mail : $EMail
+	
+EOF
+	
 	esac
 
 
