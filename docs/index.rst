@@ -27,7 +27,7 @@ Menu de ajuda
    -r --reset		Limpa registro de conexões
    -s --save-key	Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
       --set-editor	Configura o editor padrão
-      --uninstall    Remove o script	   
+      --uninstall       Remove o script	   
    -x --export		Exporta o registro de conexões
    -X --export-all	Salva as chaves e as  conexões registradas
       --install		Instala ou atualiza o Key Access ssh (kas)
