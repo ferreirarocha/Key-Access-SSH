@@ -12,37 +12,36 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 # Criando arquivos de funcao
 	
 	DIR=~/.local/share/acesso/
-	if [ ! -f $DIR ]; then
-           mkdir -p ~/.local/share/acesso
-	fi
+		if [ ! -f $DIR ]; then
+	           mkdir -p ~/.local/share/acesso
+		fi
 	
 	FILE=~/.local/share/acesso/access_functions
-	if [ ! -f $FILE ]; then
-           touch ~/.local/share/acesso/access_functions
-	fi
+		if [ ! -f $FILE ]; then
+	           touch ~/.local/share/acesso/access_functions
+		fi
+	
 	variables=~/.local/share/acesso/variables
-	if [ ! -f $variables ]; then
-           echo 'editor=nano' > ~/.local/share/acesso/variables
-
-	fi
+		if [ ! -f $variables ]; then
+	           echo 'editor=nano' > ~/.local/share/acesso/variables
+		fi
 
 # Funcao
  
-	if [[ "$SHELL" == *"bash"* ]] ;then
-		funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.bashrc && echo $?)
-				if [ "$funcao" != "0" ]; then
-					echo "source ~/.local/share/acesso/access_functions" >> ~/.bashrc
-				fi
+		if [[ "$SHELL" == *"bash"* ]] ;then
+			funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.bashrc && echo $?)
+					if [ "$funcao" != "0" ]; then
+						echo "source ~/.local/share/acesso/access_functions" >> ~/.bashrc
+					fi
 
-	elif [[ "$SHELL" == *"zsh"* ]] ;then
-		funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.zshrc && echo $?)
-	            if [ "$funcao" != "0" ]; then
-	            	echo "source ~/.local/share/acesso/access_functions" >> ~/.zshrc
-				fi
-    
-    else
-    	echo "sem shell"
-    fi
+		elif [[ "$SHELL" == *"zsh"* ]] ;then
+			funcao=$(grep -q 'source ~/.local/share/acesso/access_functions' ~/.zshrc && echo $?)
+		            if [ "$funcao" != "0" ]; then
+		            	echo "source ~/.local/share/acesso/access_functions" >> ~/.zshrc
+					fi  
+	    else
+	    	echo "sem shell"
+	    fi
  
  ajuda(){
   	cat <<EOF
@@ -69,6 +68,7 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 
 EOF
 }
+
 ajuda-registro(){
 	cat <<EOF
 	
@@ -77,6 +77,7 @@ ajuda-registro(){
 	$name -a servidor user@192.168.1.1
 EOF
 }
+
 ajuda-export(){
 	cat <<EOF
 	Para exportar todos os registros de conexões siga o exemplo;
@@ -86,6 +87,7 @@ ajuda-export(){
 
 EOF
 }
+
 ajuda-import(){
         cat <<EOF
 
@@ -107,6 +109,7 @@ ajuda-import-all(){
 EOF
 
 }
+
 ajuda-export-all(){
         cat <<EOF
 
@@ -117,13 +120,19 @@ ajuda-export-all(){
 EOF
 
 }
+
 install(){
 echo "Instalando o script KAS Key Acess SSH"
 wget -O /usr/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
 chmod +x /usr/bin/kas
-echo "Script instalado"
-echo "Veja a lista de opçoes"
+        cat <<EOF
+
+	Script instalado"
+	
+	Veja a lista de opçoes"
+EOF
 kas --help
+
 }
 
 config(){
@@ -140,6 +149,7 @@ config(){
 
 EOF
 }
+
 ajuda-edit(){
         cat <<EOF
 
@@ -152,6 +162,19 @@ ajuda-edit(){
 	O padrão do scrit é o editor nano
 EOF
 }
+versao(){
+		cat <<EOF
+	
+		Versão : $version
+		
+		Autor :  $Author
+		
+		Descrição :  $Descr
+		
+		E-Mail : $EMail
+EOF
+}
+
 RETVAL=0
 
 	case "$1" in
@@ -164,178 +187,196 @@ RETVAL=0
 	--new-key|n|-n)
 
 		ssh-keygen
-	;;
+		;;
+
 	--add|-a|a)
-	if [[ "$2" = "--help" ]]; then
+		
+		if [[ "$2" = "--help" ]]; then
+					ajuda-registro
+					exit 0	
+		else
+
+			if [[ ! -z "$2"  &&  ! -z "$3" ]]; then 
+
+			# Criando o par de chaves SSH
+				chave=~/.ssh/key-acesso.rsa
+
+				if [ ! -f $chave ]; then
+					ssh-keygen -t rsa -N '' -f "$chave"
+				
+				else
+
+#				Enviando a chave pública para o servidor
+				ssh-copy-id  -i "$chave".pub "$3"
+
+#				Adicionado a função no arquivo .bashrc para facilitar a  autenticaçaõ, o exec $SHELL recarrega a sessaõ para utilizar a nova  função.
+				echo "$2() { ssh -i "$chave" "$3"; }" >>  ~/.local/share/acesso/access_functions ; exec $SHELL
+				fi
+
+			else
 				ajuda-registro
-				exit 0	
-	fi
-
-	if [[ ! -z "$2"  &&  ! -z "$3" ]]; then 
-
-	# Criando o par de chaves
-#		SSH
-		chave=~/.ssh/key-acesso.rsa
-
-		if [ ! -f $chave ]; then
-			ssh-keygen -t rsa -N '' -f "$chave"
+				ajuda
+			fi
 		fi
-
-#		Enviando a chave pública para o servidor
-		ssh-copy-id  -i "$chave".pub "$3"
-
-#		Adicionado a função no arquivo .bashrc para facilitar a  autenticaçaõ, o exec $SHELL recarrega a sessaõ para utilizar a nova  função.
-
-		echo "$2() { ssh -i "$chave" "$3"; }" >>  ~/.local/share/acesso/access_functions ; exec $SHELL
-	else
-		ajuda-registro
-		ajuda
-	fi
 	
 	;;
+
 	--list|-l)
 
 		echo ""
 		cat ~/.local/share/acesso/access_functions | sed -e 's/()/  |  /'| sed -e 's/{//' | sed -e 's/}//' | sed -e 's/;/ /'  | sed -e 's/   //'
 		echo "" 
-	;;
+		;;
+
 	--edit|-e)
-	if [[ "$2" = "--help" ]]; then
-				ajuda-edit
-				exit 0	
-	fi
-	if [[ ! -z "$2" ]]; then 
+		
+		if [[ "$2" = "--help" ]]; then
+					ajuda-edit
+					exit 0	
+		
+		else
+		
+			if [[ ! -z "$2" ]]; then 
 
+				$2 ~/.local/share/acesso/access_functions
+			else
 
-		$2 ~/.local/share/acesso/access_functions
-	else
-		"$editor" ~/.local/share/acesso/access_functions
-	fi
-	;;
+				"$editor" ~/.local/share/acesso/access_functions
+			fi
+		fi
+		
+		;;
+
     --export|-x|x)
-	if [[ "$2" = "--help" ]]; then
+		
+		if [[ "$2" = "--help" ]]; then
+					ajuda-export
+					exit 0	
+		else
+
+			if [[ ! -z "$2"  ]]; then
+				cp  -v ~/.local/share/acesso/access_functions  ~/"$2".bkp
+			else
 				ajuda-export
-				exit 0	
-	fi
+				ajuda
+			fi
+		fi
+		;;
 
-	if [[ ! -z "$2"  ]]; then
-		cp  -v ~/.local/share/acesso/access_functions  ~/"$2".bkp
-	else
-		ajuda-export
-		ajuda
-	fi
-	;;
 	--import|-i|i)
-	if [[ "$2" = "--help" ]]; then
-				ajuda-import
-				exit 0	
-	fi
+		
+		if [[ "$2" = "--help" ]]; then
+					ajuda-import
+					exit 0	
+		else
 
-	if [[ ! -z "$2" ]]; then
-		cp  -v "$2"  -Rv ~/.local/share/acesso/access_functions 
-		exec $SHELL
-	else
-		ajuda-import
-		ajuda
-	fi
-	;;
+			if [[ ! -z "$2" ]]; then
+				cp  -v "$2"  -Rv ~/.local/share/acesso/access_functions 
+				exec $SHELL
+			else
+				ajuda-import
+				ajuda
+			fi
+		fi
+		;;
 	
 	--save-key|-s)
 
 		cp -v ~/.ssh/key-acesso.rsa      ~/key-acesso.rsa.bkp
 		cp -v ~/.ssh/key-acesso.rsa.pub  ~/key-acesso.rsa.pub.bkp
-	;;
+		;;
 	
 	--reset|-r)
 
 		echo > ~/.local/share/acesso/access_functions
 		exec $SHELL
-	;;
+		;;
 	
 	--export-all|-X)
 
-	if [[ "$2" = "--help" ]]; then
+		if [[ "$2" = "--help" ]]; then
+					ajuda-export-all
+					exit 0	
+		else
+			if [[ ! -z "$2" ]]; then
+					tar -czf -  ~/.ssh/key-acesso.rsa*  \
+					~/.local/share/acesso/access_functions | openssl enc -e -aes256 -out "$2".tar.gz
+						
+					echo "Sua configuração foi salva como "$2".tar.gz"
+			else
 				ajuda-export-all
-				exit 0	
-	fi
-	if [[ ! -z "$2" ]]; then
-			tar -czf -  ~/.ssh/key-acesso.rsa*  \
-			~/.local/share/acesso/access_functions | openssl enc -e -aes256 -out "$2".tar.gz
-				
-			echo "Sua configuração foi salva como "$2".tar.gz"
-	else
-		ajuda-export-all
-		ajuda
-	fi 
-	
+				ajuda
+			fi 
+		fi
 
-	
-	;;
+		;;
 
 	--import-all|-I)
 
-	if [[ "$2" = "--help" ]]; then
+		if [[ "$2" = "--help" ]]; then
+					ajuda-import-all
+					exit 0	
+		else
+
+			if [[ ! -z "$2" ]]; then
+				openssl enc -d -aes256 -in  "$2" | tar xz -C /
+
+			else
 				ajuda-import-all
-				exit 0	
-	fi
-
-	if [[ ! -z "$2" ]]; then
-		openssl enc -d -aes256 -in  "$2" | tar xz -C /
-
-	else
-		ajuda-import-all
-		ajuda
-	fi 
-
-
-	
-	;;
+				ajuda
+			fi 
+		fi
+		
+		;;
 
 	--conf|-c)
+	
 		config
 	
-	;;
+		;;
 
 	--help|-h)
-		ajuda	
-	;;
-	--install)
-		install
-	;;
-	--set-editor)
-	if [[ "$2" = "--help" ]]; then
-				ajuda-edit
-				exit 0	
-	fi
-
-	if [[ ! -z "$2" ]]; then
-
-	sed -i s/editor=.*/editor="$2"/ ~/.local/share/acesso/variables
 	
-	else
-		ajuda-edit
-		ajuda
+		ajuda	
+	
+		;;
 
-	fi
-	;;
+	--install)
+	
+		install
+	
+		;;
+
+	--set-editor)
+		if [[ "$2" = "--help" ]]; then
+					ajuda-edit
+					exit 0	
+		else
+
+			if [[ ! -z "$2" ]]; then
+
+			sed -i s/editor=.*/editor="$2"/ ~/.local/share/acesso/variables
+			
+			else
+				ajuda-edit
+				ajuda
+
+			fi
+		fi
+		
+		;;
+	
 	--uninstall)
 	
-	rm /usr/bin/kas
-	echo "Script remmovido"
-	;;
+		rm /usr/bin/kas
+		echo "Script remmovido"
+
+		;;
+	
 	--version|-v)
-		cat <<EOF
-	
-	Versão : $version
-	
-	Autor :  $Author
-	
-	Descrição :  $Descr
-	
-	E-Mail : $EMail
-	
-EOF
-	
+
+		versao
+
 	esac
 
 
