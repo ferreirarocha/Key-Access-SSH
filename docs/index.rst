@@ -277,7 +277,7 @@ Criando um novo par de chaves
 
 .. code:: 
 
-   kas -new-key
+   kas --new-key
 
 ou
 
