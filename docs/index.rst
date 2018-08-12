@@ -32,9 +32,9 @@ Menu de ajuda
 
    -a --add             Adiciona um nova conexão
    -c --conf            Lista os arquivos de configuração e diretórios do script
-   -e --edit            edita o arquivo de  conexões
+   -e --edit            Edita o arquivo de  conexões
    -h --help            Exibe o menu de ajuda
-   -i --import          importa registro de conexões
+   -i --import          Importa registro de conexões
    -I --import-all      Importa  as chaves e as  conexões registradas
    -l --list            Lista as conexões registradas
    -n --new-key         Cria um novo par de chaves
@@ -167,6 +167,14 @@ Instalação automática
 
    curl -s https://raw.githubusercontent.com/ferreirarocha/Key-Access-SSH/master/kas | bash -s -- --install
 
+.. _header-n454:
+
+Ou
+
+.. code::
+
+   wget bit.ly/install-kas ; bash install-kas --install
+   
 .. _header-n454:
 
 Instalação manual
