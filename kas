@@ -135,6 +135,19 @@ EOF
 kas --help
 
 }
+install(){
+echo "Instalando o script KAS Key Acess SSH"
+wget -O /usr/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
+chmod +x /usr/bin/kas
+        cat <<EOF
+
+	Script Instalado"
+	
+	Veja a lista de opçoes"
+EOF
+kas --help
+
+}
 
 config(){
 	cat <<EOF
@@ -372,6 +385,10 @@ RETVAL=0
 		rm /usr/bin/kas
 		echo "Script remmovido"
 
+		;;
+	--install)
+	
+		install
 		;;
 	
 	--version|-v)
