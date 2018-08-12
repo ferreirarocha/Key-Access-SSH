@@ -59,7 +59,8 @@ data=$(date +%d-%m-%Y-%H-%M-%S)
 	-r --reset		Limpar   registro de conexões
 	-s --save-key		Salva o par de chaves utilizadas  pelo script  na home do usuário corrente
 	   --set-editor		Configure o editor padrão
-	   --uninstall		Remover o script	   
+	   --uninstall		Remover o script
+	-U --update          	Atualiza o Key Access ssh (kas)
 	-x --export		Exportar registro de conexões
 	-X --export-all		Salva as chaves e as  conexões registradas
 	   --install		Instala ou atualiza o Key Access ssh (kas)
@@ -121,13 +122,13 @@ EOF
 
 }
 
-install(){
+update(){
 echo "Instalando o script KAS Key Acess SSH"
 wget -O /usr/bin/kas   https://raw.githubusercontent.com/ferreirarocha/utilitarios/master/kas
 chmod +x /usr/bin/kas
         cat <<EOF
 
-	Script instalado"
+	Script atualizado"
 	
 	Veja a lista de opçoes"
 EOF
@@ -341,9 +342,9 @@ RETVAL=0
 	
 		;;
 
-	--install)
+	--update|-U)
 	
-		install
+		update
 	
 		;;
 
