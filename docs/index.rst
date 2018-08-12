@@ -163,19 +163,23 @@ Instalando o script
 Instalação automática
 ---------------------
 
+.. code::
+
+   wget bit.ly/install-kas ; bash install-kas --install
+   
+.. _header-n454:
+
+Ou
+
 .. code:: 
 
    curl -s https://raw.githubusercontent.com/ferreirarocha/Key-Access-SSH/master/kas | bash -s -- --install
 
 .. _header-n454:
 
-Ou
 
-.. code::
 
-   wget bit.ly/install-kas ; bash install-kas --install
-   
-.. _header-n454:
+
 
 Instalação manual
 -----------------
