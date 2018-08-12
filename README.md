@@ -7,7 +7,7 @@ Gerencia os registros de conexão ssh
 
 ## Instalação automática
 ```
-curl -s https://raw.githubusercontent.com/ferreirarocha/Key-Access-SSH/master/kas | bash -s -- --install
+curl -s https://raw.githubusercontent.com/ferreirarocha/Key-Access-SSH/master/kas | bash -s -- --update
 ```
 
 ## Instalação manual
